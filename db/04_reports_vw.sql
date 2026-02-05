@@ -25,3 +25,22 @@ LEFT JOIN enrollments e ON g.id = e.group_id
 LEFT JOIN grades gr ON e.id = gr.enrollment_id
 GROUP BY t.name, g.term
 HAVING COUNT(g.id) > 0;
+
+CREATE VIEW vw_students_at_risk AS
+WITH student_metrics AS (
+    SELECT 
+        s.id,
+        s.name,
+        s.email,
+        AVG((gr.partial1 + gr.partial2 + gr.final) / 3) AS avg_score,
+        CAST(COUNT(CASE WHEN a.present THEN 1 END) AS FLOAT) / 
+             NULLIF(COUNT(a.id), 0) * 100 AS attendance_rate
+    FROM students s
+    JOIN enrollments e ON s.id = e.student_id
+    LEFT JOIN grades gr ON e.id = gr.enrollment_id
+    LEFT JOIN attendance a ON e.id = a.enrollment_id
+    GROUP BY s.id, s.name, s.email
+)
+SELECT name, email, ROUND(CAST(avg_score AS NUMERIC), 2) AS avg_score, ROUND(CAST(attendance_rate AS NUMERIC), 2) AS attendance_rate
+FROM student_metrics
+WHERE avg_score < 7 OR attendance_rate < 80;
