@@ -34,11 +34,11 @@ INSERT INTO students (name, email, program, enrollment_year) VALUES
 
 -- Grupos (10 registros - Distribuidos entre cursos y profes)
 INSERT INTO groups (course_id, teacher_id, term) VALUES
-(1, 1, '2025-A'), (1, 2, '2025-A'), 
-(2, 3, '2025-A'), (2, 4, '2025-A'),
-(3, 5, '2025-A'), (4, 1, '2025-A'),
-(4, 2, '2025-A'), (5, 3, '2025-A'),
-(5, 4, '2025-A'), (2, 5, '2025-A');
+(1, 1, 'Enero-Abril 2025'), (1, 2, 'Septiembre-Diciembre 2025'), 
+(2, 3, 'Enero-Abril 2025'), (2, 4, 'Enero-Abril 2026'),
+(3, 5, 'Mayo-Agosto 2025'), (4, 1, 'Enero-Abril 2026'),
+(4, 2, 'Mayo-Agosto 2025'), (5, 3, 'Mayo-Agosto 2026'),
+(5, 4, 'Septiembre-Diciembre 2025'), (2, 5, 'Septiembre-Diciembre 2026');
 
 -- Inscripciones (20 registros - Relacionando alumnos con grupos)
 INSERT INTO enrollments (student_id, group_id) VALUES

@@ -5,16 +5,16 @@ CREATE ROLE view_user WITH
     NOCREATEDB
     NOCREATEROLE
     NOINHERIT;
-GRANT CONNECT ON DATABASE db_labreportes TO view_user;
+GRANT CONNECT ON DATABASE db_awos TO view_user;
 GRANT USAGE ON SCHEMA public TO view_user;
 --Permisos 
 GRANT SELECT ON 
-    vw_top_productos,
-    vw_ventas_mensuales,
-    vw_clientes_valor,
-    vw_ranking_clientes,
-    vw_ingresos_acumulados
+    vw_course_performance,
+    vw_teacher_load,
+    vw_students_at_risk,
+    vw_attendance_by_group,
+    vw_rank_students
 TO view_user;
 --- Revocar permisos innecesarios
 REVOKE CREATE ON SCHEMA public FROM public;
-REVOKE ALL ON DATABASE db_labreportes FROM public;
+REVOKE ALL ON DATABASE db_awos FROM public;
