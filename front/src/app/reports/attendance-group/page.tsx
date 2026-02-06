@@ -13,8 +13,8 @@ interface AttendanceGroup {
   teacher: string;
   group_id: number;
   term: string;
-  total_sessions: string | number;
-  attendance_percentage: string | number;
+  total_sessions: number;
+  attendance_percentage: number;
 }
 
 export default async function AttendanceGroupPage(props: {
@@ -28,62 +28,67 @@ export default async function AttendanceGroupPage(props: {
     `SELECT course, teacher, group_id, term, total_sessions, attendance_percentage 
      FROM vw_attendance_by_group 
      WHERE term = $1 
-     ORDER BY attendance_percentage DESC`,
+     ORDER BY attendance_percentage ASC`,
     [term]
   );
 
   const groups = result.rows as AttendanceGroup[];
 
   return (
-    <main>
+    <main style={{ padding: '20px', fontFamily: 'sans-serif' }}>
       <h1>Asistencia por Grupo</h1>
-      <p>
+      <p style={{ maxWidth: '800px', color: '#666' }}>
         Este reporte identifica la inasistencia mediante el análisis de materias y docentes. Permite detectar grupos con baja asistencia para implementar estrategias de motivación y mejorar el compromiso estudiantil.
       </p>
 
-      <form method="GET">
-        <label>Seleccionar Periodo: </label>
-        <select name="term" defaultValue={term} suppressHydrationWarning>
-          {VALID_TERMS.map((t) => (
-            <option key={t} value={t}>{t}</option>
-          ))}
-        </select>
-        <button type="submit" suppressHydrationWarning>Filtrar</button>
-      </form>
+      <div style={{ marginBottom: '20px', padding: '15px', borderRadius: '8px' }}>
+        <form method="GET" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <label><strong>Periodo Académico:</strong></label>
+          <select name="term" defaultValue={term} style={{ padding: '5px' }}>
+            {VALID_TERMS.map((t) => (
+              <option key={t} value={t}>{t}</option>
+            ))}
+          </select>
+          <button type="submit" style={{ padding: '5px 15px', cursor: 'pointer' }}>Filtrar</button>
+        </form>
+      </div>
 
-      <table border={1} style={{ marginTop: '20px', width: '100%', textAlign: 'left' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
         <thead>
-          <tr style={{ backgroundColor: '#f2f2f2' }}>
-            <th>Curso</th>
-            <th>Profesor</th>
-            <th>Grupo (ID)</th>
-            <th>Periodo (Term)</th>
-            <th>Total Sesiones</th>
-            <th>% Asistencia</th>
+          <tr style={{ backgroundColor: '#333', color: 'white' }}>
+            <th style={{ padding: '12px', textAlign: 'center' }}>ID_Grupo</th>
+            <th style={{ padding: '12px' }}>Curso / Materia</th>
+            <th style={{ padding: '12px' }}>Profesor</th>
+            <th style={{ padding: '12px', textAlign: 'center' }}>Sesiones</th>
+            <th style={{ padding: '12px', textAlign: 'right' }}>Asistencia</th>
           </tr>
         </thead>
         <tbody>
           {groups.length > 0 ? (
-            groups.map((g, i) => (
-              <tr key={i}>
-                <td>{g.course}</td>
-                <td>{g.teacher}</td>
-                <td>Grupo #{g.group_id}</td>
-                <td>{g.term}</td>
-                <td>{g.total_sessions}</td>
-                <td>{g.attendance_percentage}%</td>
-              </tr>
-            ))
+            groups.map((g, i) => {
+              const isLowAttendance = Number(g.attendance_percentage) < 80;
+              return (
+                <tr key={i} style={{ borderBottom: '1px solid #ddd' }}>
+                  <td style={{ padding: '10px', textAlign: 'center', color: '#888' }}>#{g.group_id}</td>
+                  <td style={{ padding: '10px', fontWeight: '500' }}>{g.course}</td>
+                  <td style={{ padding: '10px' }}>{g.teacher}</td>
+                  <td style={{ padding: '10px', textAlign: 'center' }}>{g.total_sessions}</td>
+                  <td style={{ padding: '10px',  textAlign: 'right', fontWeight: 'bold' }}>{g.attendance_percentage}%</td>
+                </tr>
+              );
+            })
           ) : (
             <tr>
-              <td colSpan={5} style={{ textAlign: 'center' }}>No hay datos para este periodo</td>
+              <td colSpan={5} style={{ textAlign: 'center', padding: '20px' }}>
+                No hay registros de asistencia para el periodo <strong>{term}</strong>.
+              </td>
             </tr>
           )}
         </tbody>
       </table>
 
-      <br />
-      <Link href="/">Volver al Dashboard</Link>
+        <br />
+        <Link href="/" >← Volver al Dashboard</Link>
     </main>
   );
 }

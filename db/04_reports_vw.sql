@@ -32,6 +32,7 @@ WITH student_metrics AS (
         s.id,
         s.name,
         s.email,
+        s.program,
         AVG((gr.partial1 + gr.partial2 + gr.final) / 3) AS avg_score,
         CAST(COUNT(CASE WHEN a.present THEN 1 END) AS FLOAT) / 
              NULLIF(COUNT(a.id), 0) * 100 AS attendance_rate
@@ -39,27 +40,36 @@ WITH student_metrics AS (
     JOIN enrollments e ON s.id = e.student_id
     LEFT JOIN grades gr ON e.id = gr.enrollment_id
     LEFT JOIN attendance a ON e.id = a.enrollment_id
-    GROUP BY s.id, s.name, s.email
+    GROUP BY s.id, s.name, s.email, s.program
 )
-SELECT name, email, ROUND(CAST(avg_score AS NUMERIC), 2) AS avg_score, ROUND(CAST(attendance_rate AS NUMERIC), 2) AS attendance_rate
+SELECT 
+    name, 
+    email, 
+    program,
+    ROUND(CAST(avg_score AS NUMERIC), 2) AS avg_score, 
+    ROUND(CAST(attendance_rate AS NUMERIC), 2) AS attendance_rate
 FROM student_metrics
 WHERE avg_score < 7 OR attendance_rate < 80;
 
 CREATE VIEW vw_attendance_by_group AS
 SELECT 
+    g.id AS group_id,
     c.name AS course,
     t.name AS teacher, 
-    g.id AS group_id,
+    s.program AS program,
     g.term,
     COUNT(a.id) AS total_sessions,
-    ROUND(AVG(CASE WHEN a.present THEN 100 ELSE 0 END), 2) AS attendance_percentage 
+    COALESCE(
+        ROUND(AVG(CASE WHEN a.present THEN 100.0 ELSE 0.0 END)::numeric, 2), 
+        0
+    ) AS attendance_percentage 
 FROM groups g
 JOIN courses c ON g.course_id = c.id
 JOIN teachers t ON g.teacher_id = t.id
-JOIN enrollments e ON g.id = e.group_id
-JOIN attendance a ON e.id = a.enrollment_id
-GROUP BY c.name, t.name, g.id, g.term
-HAVING COUNT(a.id) > 0;
+LEFT JOIN enrollments e ON g.id = e.group_id
+LEFT JOIN students s ON e.student_id = s.id
+LEFT JOIN attendance a ON e.id = a.enrollment_id
+GROUP BY g.id, c.name, t.name, s.program, g.term;
 
 CREATE VIEW vw_rank_students AS
 SELECT 

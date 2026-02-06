@@ -1,4 +1,4 @@
--- Cursos (5 registros)
+-- 1. CURSOS
 INSERT INTO courses (code, name, credits) VALUES
 ('MAT101', 'Matemáticas Avanzadas', 8),
 ('PROG202', 'Programación Orientada a Objetos', 10),
@@ -6,15 +6,20 @@ INSERT INTO courses (code, name, credits) VALUES
 ('EST404', 'Estadística Descriptiva', 6),
 ('DB505', 'Bases de Datos Relacionales', 8);
 
--- Profesores (5 registros)
+-- 2. PROFESORES (20 registros)
 INSERT INTO teachers (name, email) VALUES
-('Dr. Roberto García', 'roberto.garcia@univ.edu'),
-('Dra. Elena Martínez', 'elena.mtz@univ.edu'),
-('Ing. Carlos Ruiz', 'carlos.ruiz@univ.edu'),
-('Mtra. Sofía López', 'sofia.lopez@univ.edu'),
-('Lic. Alberto Herrera', 'alberto.h@univ.edu');
+('Dr. Roberto García', 'roberto.garcia@univ.edu'), ('Dra. Elena Martínez', 'elena.mtz@univ.edu'),
+('Ing. Carlos Ruiz', 'carlos.ruiz@univ.edu'), ('Mtra. Sofía López', 'sofia.lopez@univ.edu'),
+('Lic. Alberto Herrera', 'alberto.h@univ.edu'), ('Dra. Beatriz Alfaro', 'beatriz.alfaro@univ.edu'),
+('Dr. Gerardo Nuñez', 'gerardo.nunez@univ.edu'), ('Mtro. Ricardo Téllez', 'ricardo.tellez@univ.edu'),
+('Ing. Marcela Vaca', 'marcela.vaca@univ.edu'), ('Dra. Sandra Cuevas', 'sandra.cuevas@univ.edu'),
+('Dr. Iván Paredes', 'ivan.paredes@univ.edu'), ('Mtra. Lorena Iturbide', 'lorena.iturbide@univ.edu'),
+('Ing. Samuel García', 'samuel.garcia@univ.edu'), ('Lic. Tania Orozco', 'tania.orozco@univ.edu'),
+('Dr. Ulises Granados', 'ulises.granados@univ.edu'), ('Dra. Victoria Kent', 'victoria.kent@univ.edu'),
+('Mtro. Walter White', 'walter.white@univ.edu'), ('Ing. Ximena Ximénez', 'ximena.x@univ.edu'),
+('Dr. Yair Zenón', 'yair.zenon@univ.edu'), ('Mtra. Zoé Robledo', 'zoe.robledo@univ.edu');
 
--- Estudiantes (15 registros)
+-- 3. ESTUDIANTES (40 registros)
 INSERT INTO students (name, email, program, enrollment_year) VALUES
 ('Juan Pérez', 'juan.p@correo.com', 'Ingeniería en Sistemas', 2023),
 ('María Rodríguez', 'm.rod@correo.com', 'Ingeniería en Sistemas', 2023),
@@ -30,39 +35,64 @@ INSERT INTO students (name, email, program, enrollment_year) VALUES
 ('Sara Villa', 's.villa@correo.com', 'Ciencia de Datos', 2024),
 ('Miguel Jara', 'm.jara@correo.com', 'Ingeniería en Sistemas', 2024),
 ('Isabel Díaz', 'i.diaz@correo.com', 'Ingeniería Industrial', 2023),
-('Raúl Lima', 'r.lima@correo.com', 'Ciencia de Datos', 2024);
+('Raúl Lima', 'r.lima@correo.com', 'Ciencia de Datos', 2024),
+('Ricardo Tapia', 'r.tapia@correo.com', 'Ingeniería en Sistemas', 2024),
+('Elena Ponce', 'e.ponce@correo.com', 'Ciencia de Datos', 2024),
+('Mauricio Cano', 'm.cano@correo.com', 'Ingeniería Industrial', 2023),
+('Claudia Rivas', 'c.rivas@correo.com', 'Ingeniería en Sistemas', 2023),
+('Roberto Sanz', 'r.sanz@correo.com', 'Ciencia de Datos', 2024),
+('Lorena Paz', 'l.paz@correo.com', 'Ingeniería Industrial', 2024),
+('Hugo Rocha', 'h.rocha@correo.com', 'Ingeniería en Sistemas', 2023),
+('Beatriz Luna', 'b.luna@correo.com', 'Ciencia de Datos', 2023),
+('Andrés Vera', 'a.vera@correo.com', 'Ingeniería Industrial', 2024),
+('Silvia Soler', 's.soler@correo.com', 'Ingeniería en Sistemas', 2023),
+('Oscar Mora', 'o.mora@correo.com', 'Ingeniería Industrial', 2023),
+('Patricia Gil', 'p.gil@correo.com', 'Ciencia de Datos', 2024),
+('Felipe Soto', 'f.soto@correo.com', 'Ingeniería en Sistemas', 2024),
+('Gloria Ríos', 'g.rios@correo.com', 'Ingeniería Industrial', 2023),
+('Ximena Lara', 'x.lara@correo.com', 'Ciencia de Datos', 2024),
+('Samuel Peña', 's.pena@correo.com', 'Ingeniería en Sistemas', 2024),
+('Karla Montes', 'k.montes@correo.com', 'Ciencia de Datos', 2024),
+('Victor Hugo', 'v.hugo@correo.com', 'Ingeniería Industrial', 2023),
+('Daniela Mar', 'd.mar@correo.com', 'Ingeniería en Sistemas', 2023),
+('Esteban Quito', 'e.quito@correo.com', 'Ciencia de Datos', 2024),
+('Monica Galindo', 'm.galindo@correo.com', 'Ingeniería Industrial', 2024),
+('Julian Alva', 'j.alva@correo.com', 'Ingeniería en Sistemas', 2023),
+('Rosa Meza', 'r.meza@correo.com', 'Ciencia de Datos', 2023),
+('Tomas Turbado', 't.turbado@correo.com', 'Ingeniería Industrial', 2024),
+('Yolanda Reys', 'y.reys@correo.com', 'Ingeniería en Sistemas', 2023);
 
--- Grupos (10 registros - Distribuidos entre cursos y profes)
+-- 4. GRUPOS (25 registros)
 INSERT INTO groups (course_id, teacher_id, term) VALUES
 (1, 1, 'Enero-Abril 2025'), (1, 2, 'Septiembre-Diciembre 2025'), 
 (2, 3, 'Enero-Abril 2025'), (2, 4, 'Enero-Abril 2026'),
 (3, 5, 'Mayo-Agosto 2025'), (4, 1, 'Enero-Abril 2026'),
 (4, 2, 'Mayo-Agosto 2025'), (5, 3, 'Mayo-Agosto 2026'),
-(5, 4, 'Septiembre-Diciembre 2025'), (2, 5, 'Septiembre-Diciembre 2026');
+(5, 4, 'Septiembre-Diciembre 2025'), (2, 5, 'Septiembre-Diciembre 2026'),
+(1, 6, 'Enero-Abril 2026'), (2, 7, 'Enero-Abril 2026'),
+(3, 8, 'Enero-Abril 2026'), (4, 9, 'Enero-Abril 2026'),
+(5, 10, 'Enero-Abril 2026'), (1, 11, 'Enero-Abril 2026'),
+(2, 12, 'Enero-Abril 2026'), (3, 13, 'Enero-Abril 2026'),
+(4, 14, 'Enero-Abril 2026'), (5, 15, 'Enero-Abril 2026'),
+(1, 16, 'Enero-Abril 2026'), (2, 17, 'Enero-Abril 2026'),
+(3, 18, 'Enero-Abril 2026'), (4, 19, 'Enero-Abril 2026'),
+(5, 20, 'Enero-Abril 2026');
 
--- Inscripciones (20 registros - Relacionando alumnos con grupos)
-INSERT INTO enrollments (student_id, group_id) VALUES
-(1, 1), (1, 3), (2, 1), (2, 4), (3, 2),
-(4, 3), (5, 5), (6, 5), (7, 1), (8, 6),
-(9, 7), (10, 8), (11, 9), (12, 10), (13, 2),
-(14, 4), (15, 6), (3, 8), (5, 10), (7, 3);
+-- 5. INSCRIPCIONES
+INSERT INTO enrollments (student_id, group_id)
+SELECT s.id, g.id FROM students s CROSS JOIN groups g 
+WHERE (s.id + g.id) % 7 = 0 LIMIT 100;
 
--- Calificaciones (20 registros - Una por cada inscripción)
-INSERT INTO grades (enrollment_id, partial1, partial2, final) VALUES
-(1, 8.5, 9.0, 8.8), (2, 6.0, 5.5, 5.8), (3, 9.5, 10.0, 9.8), (4, 4.0, 5.0, 4.5),
-(5, 7.0, 7.5, 7.3), (6, 8.0, 8.2, 8.1), (7, 6.5, 6.0, 6.2), (8, 9.0, 9.0, 9.0),
-(9, 3.5, 4.0, 3.8), (10, 10.0, 9.5, 9.7), (11, 7.5, 7.0, 7.2), (12, 5.5, 6.0, 5.7),
-(13, 8.8, 9.2, 9.0), (14, 7.2, 6.8, 7.0), (15, 4.5, 5.0, 4.8), (16, 9.1, 8.9, 9.0),
-(17, 6.8, 7.4, 7.1), (18, 5.0, 4.0, 4.5), (19, 8.0, 8.0, 8.0), (20, 9.5, 9.5, 9.5);
+-- 6. CALIFICACIONES VARIADAS (PARA EVITAR EMPATES DE 5.0)
+-- Genera notas aleatorias entre 4.0 y 10.0
+INSERT INTO grades (enrollment_id, partial1, partial2, final)
+SELECT 
+    id, 
+    ROUND((RANDOM() * 6 + 4)::numeric, 1), 
+    ROUND((RANDOM() * 6 + 4)::numeric, 1), 
+    ROUND((RANDOM() * 6 + 4)::numeric, 1)
+FROM enrollments;
 
--- Asistencia (25 registros - Muestreo de fechas)
-INSERT INTO attendance (enrollment_id, date, present) VALUES
-(1, '2026-02-01', TRUE), (1, '2026-02-02', TRUE), (1, '2026-02-03', FALSE),
-(2, '2026-02-01', FALSE), (2, '2026-02-02', FALSE), (2, '2026-02-03', FALSE),
-(3, '2026-02-01', TRUE), (3, '2026-02-02', TRUE), (3, '2026-02-03', TRUE),
-(4, '2026-02-01', TRUE), (4, '2026-02-02', FALSE), (4, '2026-02-03', TRUE),
-(5, '2026-02-01', TRUE), (6, '2026-02-01', TRUE), (7, '2026-02-01', TRUE),
-(8, '2026-02-01', TRUE), (9, '2026-02-01', FALSE), (10, '2026-02-01', TRUE),
-(11, '2026-02-01', TRUE), (12, '2026-02-01', TRUE), (13, '2026-02-01', TRUE),
-(14, '2026-02-01', FALSE), (15, '2026-02-01', TRUE), (16, '2026-02-01', TRUE),
-(17, '2026-02-01', TRUE);
+-- 7. ASISTENCIA VARIADA
+INSERT INTO attendance (enrollment_id, date, present)
+SELECT id, '2026-02-05', (RANDOM() > 0.2) FROM enrollments;
