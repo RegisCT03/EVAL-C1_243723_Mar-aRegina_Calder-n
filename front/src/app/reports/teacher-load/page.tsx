@@ -40,8 +40,8 @@ export default async function TeacherLoadPage(props: {
           </p>
         </div>
         <div className={styles.backContainer}>
-        <Link href="/" className={styles.backLink}>Volver al Dashboard</Link>
-      </div>
+          <Link href="/" className={styles.backLink}>Volver al Dashboard</Link>
+        </div>
       </header>
 
       <section className={styles.bentoSection}>
