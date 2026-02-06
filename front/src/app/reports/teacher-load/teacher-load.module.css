@@ -1,0 +1,160 @@
+.wrapper {
+  background-color: #fdf7fd;
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #461D3A;
+}
+
+.header {
+  max-width: 1000px;
+  margin: 0 auto 30px;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: #461D3A;
+  margin-bottom: 15px;
+}
+
+.insightBox {
+  background-color: #ECD0EC;
+  padding: 15px 20px;
+  border-radius: 16px;
+}
+
+.insightBox p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #7E2A53;
+}
+
+.bentoSection {
+  max-width: 1000px;
+  margin: 0 auto;
+  background: white;
+  padding: 30px;
+  border-radius: 24px;
+  border: 2px solid #ECD0EC;
+}
+
+.searchForm {
+  margin-bottom: 25px;
+  display: flex;
+  gap: 10px;
+}
+
+.input {
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: 2px solid #ECD0EC;
+  width: 300px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  border-color: #BA71A2;
+}
+
+.searchButton {
+  background-color: #461D3A;
+  color: white;
+  border: none;
+  padding: 0 25px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.searchButton:hover {
+  background-color: #7E2A53;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+}
+
+.table th {
+  padding: 12px 15px;
+  text-align: left;
+  color: #BA71A2;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.table tr td {
+  background-color: #fdf7fd;
+  padding: 15px;
+  border-top: 1px solid #f2e1f2;
+  border-bottom: 1px solid #f2e1f2;
+}
+
+.table tr td:first-child {
+  border-left: 1px solid #f2e1f2;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.table tr td:last-child {
+  border-right: 1px solid #f2e1f2;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.teacherName {
+  font-weight: 600;
+  color: #502A50;
+}
+
+.center { text-align: center; }
+.right { text-align: right; }
+.bold { font-weight: bold; color: #461D3A; }
+
+.pagination {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.pageLink {
+  text-decoration: none;
+  color: #7E2A53;
+  font-weight: 600;
+  padding: 8px 15px;
+  border-radius: 8px;
+  background: #ECD0EC;
+  font-size: 0.9rem;
+}
+
+.pageIndicator {
+  font-size: 0.9rem;
+  color: #BA71A2;
+}
+
+.backContainer {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.backLink {
+  color: #BA71A2;
+  text-decoration: none;
+  font-size: 0.9rem;
+  border-bottom: 1px solid transparent;
+  transition: border 0.2s;
+}
+
+.backLink:hover {
+  border-bottom-color: #BA71A2;
+}

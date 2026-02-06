@@ -1,5 +1,6 @@
 import { query } from '../../../../lib/db';
 import Link from 'next/link';
+import styles from '../teacher-load/teacher-load.module.css';
 
 interface TeacherLoad {
   teacher_name: string;
@@ -13,7 +14,6 @@ export default async function TeacherLoadPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const sParams = await props.searchParams;
-  
   const search = typeof sParams.search === 'string' ? sParams.search.trim() : '';
   const page = Number(sParams.page) || 1;
   const pageSize = 10;
@@ -31,69 +31,74 @@ export default async function TeacherLoadPage(props: {
   const teachers = result.rows as TeacherLoad[];
 
   return (
-    <main style={{ padding: '20px' }}>
-      <h1>Carga Académica por Docente</h1>
-      <p style={{ color: '#666' }}>
-        <strong>Insight:</strong> Este reporte permite equilibrar la distribución de alumnos y grupos, asegurando la calidad educativa mediante el monitoreo del promedio general por docente.
-      </p>
-
-      <form method="GET" style={{ marginBottom: '20px' }}>
-        <input 
-          type="text" 
-          name="search" 
-          placeholder="Buscar docente..." 
-          defaultValue={search}
-          style={{ padding: '8px', width: '250px' }}
-        />
-        <button type="submit" style={{ padding: '8px 15px', marginLeft: '10px' }}>Buscar</button>
-      </form>
-
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#222', color: '#fff' }}>
-            <th style={{ padding: '12px', textAlign: 'left' }}>Docente</th>
-            <th style={{ padding: '12px', textAlign: 'left' }}>Periodo</th>
-            <th style={{ padding: '12px', textAlign: 'center' }}>Grupos</th>
-            <th style={{ padding: '12px', textAlign: 'center' }}>Total Alumnos</th>
-            <th style={{ padding: '12px', textAlign: 'right' }}>Promedio</th>
-          </tr>
-        </thead>
-        <tbody>
-          {teachers.length > 0 ? (
-            teachers.map((t, i) => (
-              <tr key={i} style={{ borderBottom: '1px solid #eee' }}>
-                <td style={{ padding: '10px' }}>{t.teacher_name}</td>
-                <td style={{ padding: '10px' }}>{t.term}</td>
-                <td style={{ padding: '10px', textAlign: 'center' }}>{t.total_groups}</td>
-                <td style={{ padding: '10px', textAlign: 'center' }}>{t.total_students}</td>
-                <td style={{ padding: '10px', textAlign: 'right', fontWeight: 'bold' }}>
-                  {t.avg_grade}
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr><td colSpan={5} style={{ textAlign: 'center', padding: '20px' }}>No se encontraron registros.</td></tr>
-          )}
-        </tbody>
-      </table>
-
-      <nav style={{ marginTop: '20px', display: 'flex', gap: '15px', alignItems: 'center' }}>
-        {page > 1 && (
-          <Link href={`?search=${search}&page=${page - 1}`} style={{ color: '#FFFF' }}>
-            &larr; Anterior
-          </Link>
-        )}
-        <span>Página <strong>{page}</strong></span>
-        {teachers.length === pageSize && (
-          <Link href={`?search=${search}&page=${page + 1}`} style={{ color: '#FFFF' }}>
-            Siguiente &rarr;
-          </Link>
-        )}
-      </nav>
-
-      <div style={{ marginTop: '30px' }}>
-        <Link href="/">Volver al Dashboard</Link>
+    <main className={styles.wrapper}>
+      <header className={styles.header}>
+        <h1>Carga Académica por Docente</h1>
+        <div className={styles.insightBox}>
+          <p>
+            <strong>Insight:</strong> Este reporte permite equilibrar la distribución de alumnos y grupos, asegurando la calidad educativa.
+          </p>
+        </div>
+        <div className={styles.backContainer}>
+        <Link href="/" className={styles.backLink}>Volver al Dashboard</Link>
       </div>
+      </header>
+
+      <section className={styles.bentoSection}>
+        <form method="GET" className={styles.searchForm}>
+          <input 
+            type="text" 
+            name="search" 
+            placeholder="Buscar docente..." 
+            defaultValue={search}
+            className={styles.input}
+          />
+          <button type="submit" className={styles.searchButton}>Buscar</button>
+        </form>
+
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Docente</th>
+                <th>Periodo</th>
+                <th className={styles.center}>Grupos</th>
+                <th className={styles.center}>Total Alumnos</th>
+                <th className={styles.right}>Promedio</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teachers.length > 0 ? (
+                teachers.map((t, i) => (
+                  <tr key={i}>
+                    <td className={styles.teacherName}>{t.teacher_name}</td>
+                    <td>{t.term}</td>
+                    <td className={styles.center}>{t.total_groups}</td>
+                    <td className={styles.center}>{t.total_students}</td>
+                    <td className={`${styles.right} ${styles.bold}`}>{t.avg_grade}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td colSpan={5} className={styles.noData}>No se encontraron registros.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <nav className={styles.pagination}>
+          {page > 1 && (
+            <Link href={`?search=${search}&page=${page - 1}`} className={styles.pageLink}>
+              &larr; Anterior
+            </Link>
+          )}
+          <span className={styles.pageIndicator}>Página <strong>{page}</strong></span>
+          {teachers.length === pageSize && (
+            <Link href={`?search=${search}&page=${page + 1}`} className={styles.pageLink}>
+              Siguiente &rarr;
+            </Link>
+          )}
+        </nav>
+      </section>
     </main>
   );
 }
