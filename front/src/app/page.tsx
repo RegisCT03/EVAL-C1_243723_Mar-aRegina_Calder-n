@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import styles from './dashboard.module.css';
 
 const reports = [
   {
@@ -35,33 +36,29 @@ const reports = [
 
 export default function DashboardPage() {
   return (
-    <main>
-      <header>
-        <h1>Dashboard Escolar</h1>
-        <p>Panel de control para la gestión académica</p>
-      </header>
+    <div className={styles.wrapper}>
+      <main className={styles.container}>
+        <header className={styles.header}>
+          <h1>Dashboard Escolar</h1>
+          <p>Gestión académica centralizada</p>
+        </header>
 
-      <hr />
-
-      <section>
-        <h2>Reportes Disponibles</h2>
-        <nav>
+        <section className={styles.grid}>
           {reports.map((report) => (
-            <article key={report.id} style={{ marginBottom: '2rem', border: '1px solid #ccc', padding: '1rem' }}>
+            <div key={report.id} className={styles.card}>
               <h3>{report.title}</h3>
-              <p><strong>Descripción:</strong> {report.description}</p>
-              
-              <Link href={report.path}>
-                Ver Reporte Detallado
+              <p>{report.description}</p>
+              <Link href={report.path} className={styles.link}>
+                Abrir Reporte
               </Link>
-            </article>
+            </div>
           ))}
-        </nav>
-      </section>
+        </section>
 
-      <footer>
-        <p>Acceso restringido: Usuario App.</p>
-      </footer>
-    </main>
+        <footer className={styles.footer}>
+          Acceso restringido: <span>User App</span>
+        </footer>
+      </main>
+    </div>
   );
 }

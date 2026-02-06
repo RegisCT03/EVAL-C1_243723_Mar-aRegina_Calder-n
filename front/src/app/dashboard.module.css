@@ -1,0 +1,90 @@
+.wrapper {
+  background-color: #fdf7fd; /* Un blanco con una gota de rosa */
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.header h1 {
+  color: #461D3A; /* Brown Coffee */
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+.header p {
+  color: #7E2A53; /* Dark Raspberry */
+  opacity: 0.7;
+}
+
+/* La cuadrícula - sencilla y flexible */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* La tarjeta estilo "Bento" */
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 24px; /* Bordes muy redondos = más humano/moderno */
+  border: 2px solid #ECD0EC; /* Classic Rose */
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #BA71A2; /* Pearly Purple */
+  transform: scale(1.02);
+}
+
+.card h3 {
+  color: #502A50; /* Japanese Violet */
+  margin-top: 0;
+  font-size: 1.3rem;
+}
+
+.card p {
+  color: #7E2A53;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+/* El botón sencillo */
+.link {
+  display: inline-block;
+  text-decoration: none;
+  background-color: #461D3A;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  background-color: #7E2A53;
+}
+
+.footer {
+  margin-top: 50px;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #BA71A2;
+}
+
+.footer span {
+  font-weight: bold;
+  color: #461D3A;
+}
