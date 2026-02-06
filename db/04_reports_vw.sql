@@ -18,7 +18,7 @@ SELECT
     g.term AS term,
     COUNT(DISTINCT g.id) AS total_groups,
     COUNT(e.id) AS total_students,
-    COALESCE(ROUND(AVG(gr.final), 2), 0) AS avg_grade
+    COALESCE(ROUND(AVG(gr.final)::numeric, 2), 0) AS avg_grade
 FROM teachers t
 JOIN groups g ON t.id = g.teacher_id
 LEFT JOIN enrollments e ON g.id = e.group_id
