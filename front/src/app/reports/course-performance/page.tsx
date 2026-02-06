@@ -1,5 +1,6 @@
 import { query } from '../../../../lib/db';
 import Link from 'next/link';
+import styles from '../teacher-load/teacher-load.module.css';
 
 const VALID_TERMS = ['Enero-Abril 2025', 'Mayo-Agosto 2025', 'Septiembre-Diciembre 2025', 'Enero-Abril 2026', 'Mayo-Agosto 2026', 'Septiembre-Diciembre 2026'] as const;
 const VALID_PROGRAMS = ['Todas las carreras','Ingeniería en Sistemas', 'Ciencia de Datos', 'Ingeniería Industrial'] as const;
@@ -23,11 +24,10 @@ export default async function CoursePerformancePage(props: {
   const pageSize = 10;
   const offset = (page - 1) * pageSize;
 
-  let sql = `
-    SELECT course_name, term, student_program, general_average, failed_students 
+  let sql = 
+    `SELECT course_name, term, student_program, general_average, failed_students 
     FROM vw_course_performance 
-    WHERE term = $1
-  `;
+    WHERE term = $1`;
   const params: any[] = [term];
 
   if (program) {
@@ -42,71 +42,91 @@ export default async function CoursePerformancePage(props: {
   const courses = result.rows as CoursePerformance[];
 
   return (
-    <main style={{ padding: '20px' }}>
-      <h1>Desempeño por Curso</h1>
-      <p style={{ color: '#666' }}>Análisis de promedios generales y detección de índices de reprobación por programa académico.</p>
-
-      <form method="GET" style={{ marginBottom: '20px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <div>
-          <label>Periodo: </label>
-          <select name="term" defaultValue={term}>
-            {VALID_TERMS.map(t => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
+    <main className={styles.wrapper}>
+      <header className={styles.header}>
+        <h1>Desempeño por Curso</h1>
+        <div className={styles.insightBox}>
+          <p>
+            <strong>Insight:</strong> Análisis de promedios generales y detección de índices de reprobación por programa académico para la toma de decisiones preventivas.
+          </p>
         </div>
-
-        <div>
-          <label>Carrera: </label>
-          <select name="program" defaultValue={program}>
-            <option value="">Todas las carreras</option>
-            {VALID_PROGRAMS.filter(p => p !== 'Todas las carreras').map(p => (
-              <option key={p} value={p}>{p}</option>
-            ))}
-          </select>
+        <div className={styles.backContainer}>
+          <Link href="/" className={styles.backLink}>Volver al Dashboard</Link>
         </div>
+      </header>
 
-        <button type="submit">Aplicar Filtros</button>
-      </form>
+      <section className={styles.bentoSection}>
+        <form method="GET" className={styles.searchForm}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
+            <label style={{ fontSize: '0.8rem', color: '#BA71A2', fontWeight: 'bold', textTransform: 'uppercase' }}>Periodo</label>
+            <select name="term" defaultValue={term} className={styles.input}>
+              {VALID_TERMS.map(t => (
+                <option key={t} value={t}>{t}</option>
+              ))}
+            </select>
+          </div>
 
-      <table border={1} style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr style={{ backgroundColor: '#222', color: 'white' }}>
-            <th style={{ padding: '10px' }}>Curso</th>
-            <th style={{ padding: '10px' }}>Promedio Gral.</th>
-            <th style={{ padding: '10px' }}>Alumnos Reprobados</th>
-          </tr>
-        </thead>
-        <tbody>
-          {courses.length > 0 ? (
-            courses.map((c, i) => (
-              <tr key={i} style={{ textAlign: 'center' }}>
-                <td style={{ textAlign: 'left', padding: '10px' }}>{c.course_name}</td>
-                <td style={{ fontWeight: 'bold' }}>{c.general_average}</td>
-                <td style={{ color: Number(c.failed_students) > 0 ? 'red' : 'inherit' }}>
-                  {c.failed_students}
-                </td>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
+            <label style={{ fontSize: '0.8rem', color: '#BA71A2', fontWeight: 'bold', textTransform: 'uppercase' }}>Carrera</label>
+            <select name="program" defaultValue={program} className={styles.input}>
+              <option value="">Todas las carreras</option>
+              {VALID_PROGRAMS.filter(p => p !== 'Todas las carreras').map(p => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+          </div>
+
+          <button type="submit" className={styles.searchButton}>Aplicar Filtros</button>
+        </form>
+
+        <div className={styles.tableContainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>Curso</th>
+                <th className={styles.center}>Promedio Gral.</th>
+                <th className={styles.center}>Alumnos Reprobados</th>
               </tr>
-            ))
-          ) : (
-            <tr><td colSpan={3} style={{ padding: '20px' }}>No se encontraron registros con estos filtros.</td></tr>
+            </thead>
+            <tbody>
+              {courses.length > 0 ? (
+                courses.map((c, i) => (
+                  <tr key={i}>
+                    <td className={styles.bold} style={{ color: '#461D3A' }}>{c.course_name}</td>
+                    <td className={`${styles.center} ${styles.bold}`}>{c.general_average}</td>
+                    <td className={styles.center} style={{ 
+                      color: Number(c.failed_students) > 0 ? '#7E2A53' : 'inherit',
+                      fontWeight: Number(c.failed_students) > 0 ? '800' : 'normal'
+                    }}>
+                      {c.failed_students}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className={styles.noData}>
+                    No se encontraron registros con estos filtros.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <nav className={styles.pagination}>
+          {page > 1 && (
+            <Link href={`?term=${term}&program=${program}&page=${page - 1}`} className={styles.pageLink}>
+              &larr; Anterior
+            </Link>
           )}
-        </tbody>
-      </table>
-
-      <nav style={{ marginTop: '20px', display: 'flex', gap: '15px', alignItems: 'center' }}>
-        {page > 1 && (
-          <Link href={`?term=${term}&program=${program}&page=${page - 1}`}>&larr; Anterior</Link>
-        )}
-        <span>Página <strong>{page}</strong></span>
-        {courses.length === pageSize && (
-          <Link href={`?term=${term}&program=${program}&page=${page + 1}`}>Siguiente &rarr;</Link>
-        )}
-      </nav>
-
-      <div style={{ marginTop: '30px' }}>
-        <Link href="/">Volver al Dashboard</Link>
-      </div>
+          <span className={styles.pageIndicator}>Página <strong>{page}</strong></span>
+          {courses.length === pageSize && (
+            <Link href={`?term=${term}&program=${program}&page=${page + 1}`} className={styles.pageLink}>
+              Siguiente &rarr;
+            </Link>
+          )}
+        </nav>
+      </section>
     </main>
   );
 }
