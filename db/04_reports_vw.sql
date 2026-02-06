@@ -1,3 +1,6 @@
+-- ¿QUÉ DEVUELVE?: Desempeño académico por materia, periodo y carrera.
+-- GRAIN: Por Curso + Periodo + Programa Académico.
+-- MÉTRICAS: Promedio general (0-10) y Conteo de alumnos reprobados (< 6).
 CREATE VIEW vw_course_performance AS
 SELECT 
     c.name AS course_name,
@@ -12,6 +15,14 @@ JOIN grades gr ON e.id = gr.enrollment_id
 JOIN students s ON e.student_id = s.id
 GROUP BY c.name, g.term, s.program;
 
+-- VERIFY QUERIES:
+-- SELECT * FROM vw_course_performance WHERE failed_students > 0;
+-- SELECT * FROM vw_course_performance ORDER BY general_average DESC LIMIT 5;
+
+
+-- ¿QUÉ DEVUELVE?: Listado de docentes con su carga de trabajo actual.
+-- GRAIN: Por Docente + Periodo.
+-- MÉTRICAS: Total de grupos únicos, total de alumnos atendidos y promedio de notas.
 CREATE VIEW vw_teacher_load AS
 SELECT 
     t.name AS teacher_name,
@@ -26,6 +37,14 @@ LEFT JOIN grades gr ON e.id = gr.enrollment_id
 GROUP BY t.name, g.term
 HAVING COUNT(g.id) > 0;
 
+-- VERIFY QUERIES:
+-- SELECT * FROM vw_teacher_load WHERE total_students > 30;
+-- SELECT teacher_name, total_groups FROM vw_teacher_load WHERE term = '2024-1';
+
+
+-- ¿QUÉ DEVUELVE?: Estudiantes con riesgo de reprobación o deserción.
+-- GRAIN: Por Estudiante.
+-- MÉTRICAS: Promedio de calificaciones y porcentaje de asistencia.
 CREATE VIEW vw_students_at_risk AS
 WITH student_metrics AS (
     SELECT 
@@ -51,6 +70,14 @@ SELECT
 FROM student_metrics
 WHERE avg_score < 7 OR attendance_rate < 80;
 
+-- VERIFY QUERIES:
+-- SELECT COUNT(*) FROM vw_students_at_risk;
+-- SELECT * FROM vw_students_at_risk WHERE attendance_rate < 50;
+
+
+-- ¿QUÉ DEVUELVE?: Porcentaje de asistencia detallado por grupo.
+-- GRAIN: Por Grupo + Materia + Docente + Programa.
+-- MÉTRICAS: Total de sesiones registradas y porcentaje de asistencia acumulada.
 CREATE VIEW vw_attendance_by_group AS
 SELECT 
     g.id AS group_id,
@@ -71,6 +98,14 @@ LEFT JOIN students s ON e.student_id = s.id
 LEFT JOIN attendance a ON e.id = a.enrollment_id
 GROUP BY g.id, c.name, t.name, s.program, g.term;
 
+-- VERIFY QUERIES:
+-- SELECT * FROM vw_attendance_by_group WHERE attendance_percentage < 85;
+-- SELECT course, attendance_percentage FROM vw_attendance_by_group WHERE term = '2024-1';
+
+
+-- ¿QUÉ DEVUELVE?: Ranking de mejores promedios segmentado.
+-- GRAIN: Por Estudiante + Programa + Periodo.
+-- MÉTRICAS: Promedio final y posición competitiva (Ranking).
 CREATE VIEW vw_rank_students AS
 SELECT 
     s.name AS student_name,
@@ -83,3 +118,7 @@ JOIN enrollments e ON s.id = e.student_id
 JOIN groups g ON e.group_id = g.id
 JOIN grades gr ON e.id = gr.enrollment_id
 GROUP BY s.name, s.program, g.term;
+
+-- VERIFY QUERIES:
+-- SELECT * FROM vw_rank_students WHERE rank_position = 1;
+-- SELECT * FROM vw_rank_students WHERE program = 'Sistemas' AND term = '2024-1';
