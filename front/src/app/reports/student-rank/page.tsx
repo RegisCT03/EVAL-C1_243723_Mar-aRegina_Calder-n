@@ -1,41 +1,14 @@
-import { query } from '../../../../lib/db';
 import Link from 'next/link';
-import { z } from 'zod';
 import styles from '../teacher-load/teacher-load.module.css';
-
-const VALID_PROGRAMS = ['Ingeniería en Sistemas', 'Ciencia de Datos', 'Ingeniería Industrial'] as const;
-
-const VALID_TERMS = ['Enero-Abril 2025', 'Mayo-Agosto 2025', 'Septiembre-Diciembre 2025', 'Enero-Abril 2026', 'Mayo-Agosto 2026', 'Septiembre-Diciembre 2026'] as const;
-
-const searchParamsSchema = z.object({
-  program: z.enum(VALID_PROGRAMS).optional().default('Ingeniería en Sistemas'),
-  term: z.enum(VALID_TERMS).optional().default('Enero-Abril 2025'),
-});
-
-interface RankingStudent {
-  student_name: string;
-  program: string;
-  term: string;
-  final_avg: number;
-  rank_position: number;
-}
+import { getStudentRanking, rankingParamsSchema, VALID_PROGRAMS, VALID_TERMS } from '../../../../services/rank.service'
 
 export default async function RankingPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const sParams = await props.searchParams;
-  const parsed = searchParamsSchema.safeParse(sParams);
+  const parsed = rankingParamsSchema.safeParse(sParams);
   const { program, term } = parsed.success ? parsed.data : { program: 'Ingeniería en Sistemas', term: 'Enero-Abril 2025' };    
-    
-  const result = await query(
-    `SELECT student_name, program, term, final_avg, rank_position 
-     FROM vw_rank_students 
-     WHERE program = $1 AND term = $2 
-     ORDER BY rank_position ASC`,
-    [program, term]
-  );
-
-  const students = result.rows as RankingStudent[];
+  const students = await getStudentRanking(program, term);
   const topStudent = students[0];
 
   return (
@@ -43,9 +16,7 @@ export default async function RankingPage(props: {
       <header className={styles.header}>
         <h1>Ranking de Estudiantes</h1>
         <div className={styles.insightBox}>
-          <p>
-            <strong>Insight:</strong> Este reporte visualiza el desempeño sobresaliente para la asignación de becas y reconocimientos.
-          </p>
+          <p><strong>Insight:</strong> Este reporte visualiza el desempeño sobresaliente para la asignación de becas y reconocimientos.</p>
         </div>
         <div className={styles.backContainer}>
           <Link href="/" className={styles.backLink}>Volver al Dashboard</Link>
@@ -54,14 +25,7 @@ export default async function RankingPage(props: {
 
       <section className={styles.bentoSection}>
         {topStudent && (
-          <div style={{ 
-            backgroundColor: '#461D3A', 
-            color: '#fff', 
-            padding: '20px', 
-            borderRadius: '16px', 
-            marginBottom: '30px',
-            textAlign: 'center' 
-          }}>
+          <div style={{ backgroundColor: '#461D3A', color: '#fff', padding: '20px', borderRadius: '16px', marginBottom: '30px', textAlign: 'center' }}>
             <h3 style={{ color: '#ECD0EC', margin: 0, fontSize: '0.9rem', textTransform: 'uppercase' }}>
               Primer lugar de Excelencia — {program}
             </h3>

@@ -1,14 +1,6 @@
-import { query } from '../../../../lib/db';
 import Link from 'next/link';
 import styles from '../teacher-load/teacher-load.module.css';
-
-interface TeacherLoad {
-  teacher_name: string;
-  term: string;
-  total_groups: number;
-  total_students: number;
-  avg_grade: number;
-}
+import { getTeacherLoad, TeacherLoad } from '../../../../services/teacher.service';
 
 export default async function TeacherLoadPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -17,18 +9,7 @@ export default async function TeacherLoadPage(props: {
   const search = typeof sParams.search === 'string' ? sParams.search.trim() : '';
   const page = Number(sParams.page) || 1;
   const pageSize = 10;
-  const offset = (page - 1) * pageSize;
-
-  const result = await query(
-    `SELECT teacher_name, term, total_groups, total_students, avg_grade 
-     FROM vw_teacher_load 
-     WHERE teacher_name ILIKE $1
-     ORDER BY teacher_name ASC 
-     LIMIT $2 OFFSET $3`,
-    [`%${search}%`, pageSize, offset]
-  );
-
-  const teachers = result.rows as TeacherLoad[];
+  const teachers = await getTeacherLoad(search, page, pageSize);
 
   return (
     <main className={styles.wrapper}>
@@ -36,7 +17,7 @@ export default async function TeacherLoadPage(props: {
         <h1>Carga Académica por Docente</h1>
         <div className={styles.insightBox}>
           <p>
-            <strong>Insight:</strong> Este reporte permite equilibrar la distribución de alumnos y grupos, asegurando la calidad educativa.
+            <strong>Insight:</strong> Este reporte permite equilibrar la distribución de alumnos y grupos.
           </p>
         </div>
         <div className={styles.backContainer}>

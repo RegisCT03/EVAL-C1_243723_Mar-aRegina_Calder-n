@@ -1,22 +1,6 @@
-import { query } from '../../../../lib/db';
 import Link from 'next/link';
-import { z } from 'zod';
 import styles from '../teacher-load/teacher-load.module.css';
-
-const VALID_TERMS = ['Enero-Abril 2025', 'Mayo-Agosto 2025', 'Septiembre-Diciembre 2025', 'Enero-Abril 2026', 'Mayo-Agosto 2026', 'Septiembre-Diciembre 2026'] as const;
-
-const searchParamsSchema = z.object({
-  term: z.enum(VALID_TERMS).optional().default('Enero-Abril 2025'),
-});
-
-interface AttendanceGroup {
-  course: string; 
-  teacher: string;
-  group_id: number;
-  term: string;
-  total_sessions: number;
-  attendance_percentage: number;
-}
+import { getAttendanceByTerm, searchParamsSchema, VALID_TERMS } from '../../../../services/attendance.service';
 
 export default async function AttendanceGroupPage(props: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -24,16 +8,8 @@ export default async function AttendanceGroupPage(props: {
   const sParams = await props.searchParams;
   const parsed = searchParamsSchema.safeParse(sParams);
   const { term } = parsed.success ? parsed.data : { term: 'Enero-Abril 2025' };
-
-  const result = await query(
-    `SELECT course, teacher, group_id, term, total_sessions, attendance_percentage 
-     FROM vw_attendance_by_group 
-     WHERE term = $1 
-     ORDER BY attendance_percentage ASC`,
-    [term]
-  );
-
-  const groups = result.rows as AttendanceGroup[];
+  
+  const groups = await getAttendanceByTerm(term);
 
   return (
     <main className={styles.wrapper}>
